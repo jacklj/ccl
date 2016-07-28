@@ -1,7 +1,7 @@
 Connected Component Labelling
 =============================
 
-Connected Component Labelling is a technique used to identify and label blobs of connected foreground pixels in an image. 
+Connected Component Labelling is a technique used in Computer Vision and Image Processing to identify blobs of connected foreground pixels in an image. 
 
 It is often used as one of the first steps in an image processing pipeline - image segmentation. Once the connected components in an image have been labelled, it is easy to extract each component for further processing, such as for object classification (determining what kind of thing the object is). A common example is in Optical Character Recognition (recognition of handwritten or typed text in images): once each component has been labelled, it can be extracted and passed to a character recognition stage (e.g. a neural net). 
 
@@ -10,16 +10,18 @@ Some modern image processing pipelines have replaced techniques like Connected C
 There are two main ways to implement the Connected Component Labelling algorithm: one scans through the image sequentially top to bottom and left to right, labelling each pixel based on its neighbours that have previously been labelled. A second pass is then required to complete the labelling, as certain shapes will result in components containing multiple labels after the first pass. The second implementation labels the whole of each component as soon as it encounters one of it's pixels, using a stack to keep track of the component's pixels. In this article we'll look at the first implementation - designed by Rosenfeld and Pfaltz in 1966 using results from graph theory - as it is particularly efficient.
 
 
-Two pass Connected Component Labelling with union-find
+Two pass Connected Component Labelling with Union-Find
 -------------------------------------------------------
 
 For simplicity, we will consider a monochrome image as a two dimensional boolean list, with background pixels having value 0 and foreground pixels having value 1. We will label the components with positive integers.
 
-	[[0,1,1,1,0],
-	 [0,0,1,0,0],
-	 [1,0,1,0,0],
-	 [1,1,1,0,0],
-	 [0,0,0,0,0]]
+	+---------+
+	|  * * *  |			 [[0,1,1,1,0],
+	|    *    | 		  [0,0,1,0,0],
+	|*   *    | 	-> 	  [1,0,1,0,0],
+	|* * *    |  		  [1,1,1,0,0],
+	|         |  		  [0,0,0,0,0]]
+	+---------+
 
 
 First Pass
@@ -56,6 +58,7 @@ Certain shapes can, however, result in components containing multiple different 
 	3 x
 
 We will record in our disjoint-set data structure that the labels 3 and 4 are equivalent.
+
 
 
 Second Pass
