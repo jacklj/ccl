@@ -94,7 +94,7 @@ For example:
 
 Done!
 
-- Jack Lawrence-Jones, 28th July 2016.
+Jack Lawrence-Jones, 28th July 2016.
 
 
 
