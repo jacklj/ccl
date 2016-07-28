@@ -1,7 +1,9 @@
 Connected Component Labelling
 =============================
 
-Connected Component Labelling is a technique used to identify and label blobs of connected foreground pixels in an image. It is often used as one of the first steps in an image processing pipeline - image segmentation. Once the connected components in an image have been labelled, it is easy to extract each component for further processing, such as for object classification (determining what kind of thing the object is). A common example is in Optical Character Recognition (recognition of handwritten or typed text in images): once each component has been labelled, it can be extracted and passed to a character recognition stage (e.g. a neural net). 
+Connected Component Labelling is a technique used to identify and label blobs of connected foreground pixels in an image. 
+
+It is often used as one of the first steps in an image processing pipeline - image segmentation. Once the connected components in an image have been labelled, it is easy to extract each component for further processing, such as for object classification (determining what kind of thing the object is). A common example is in Optical Character Recognition (recognition of handwritten or typed text in images): once each component has been labelled, it can be extracted and passed to a character recognition stage (e.g. a neural net). 
 
 Some modern image processing pipelines have replaced techniques like Connected Component Labelling with end to end neural nets (deep neural nets), however algorithms like Connected Component Labelling are still key for applications such as live object detection and tracking, in embedded systems and when training data is limited.
 
@@ -13,11 +15,11 @@ Two pass Connected Component Labelling with union-find
 
 For simplicity, we will consider a monochrome image as a two dimensional boolean list, with background pixels having value 0 and foreground pixels having value 1. We will label the components with positive integers.
 
-[[0,1,1,1,0],
- [0,0,1,0,0],
- [1,0,1,0,0],
- [1,1,1,0,0],
- [0,0,0,0,0]]
+	[[0,1,1,1,0],
+	 [0,0,1,0,0],
+	 [1,0,1,0,0],
+	 [1,1,1,0,0],
+	 [0,0,0,0,0]]
 
 
 First Pass
@@ -26,11 +28,13 @@ First Pass
 In the first pass we scan through the image, pixel by pixel, and look at each pixel's neighbours. Which specific neighbours we look at is arbitrary and depends on the purpose of our image processing system. Two commonly used connectivities are 4-connectivity and 8-connectivity:
 
  4-connectivity (north, east, south, west):
+
 	  n
 	w x e
 	  s
 
  8-connectivity (north, north-east, east, south-east, south, south-west, west, north-west):
+
 	nw n ne
 	w  x  e
 	sw s se
@@ -38,6 +42,7 @@ In the first pass we scan through the image, pixel by pixel, and look at each pi
 For this article we will use 4-connectivity for simplicity.
 
 As we scan through the image row by row from top to bottom, and within each row left to right, we only need to examine those neighbours above and to the left of the current pixel. Therefore our 4-connectivity labelling kernel (the shape we are using to scan through the image and get each pixels neighbours) looks like this:
+
 	  n
 	w x
 
@@ -57,12 +62,16 @@ Second Pass
 -----------
 Now we use the recorded label equivalences to fix any component labelling inconsistencies in our image.
 
-Again scanning through the image pixel by pixel, for each labelled pixel we check if we recorded any equivalent labels in our disjoint-set data structure. If we did, then we replace the pixel's label with the lowest label (the 'representative') in it's equivalence set, ensuring that every label in it's equivalence set is eventually replaced with the representative label of that set. For example:
+Again scanning through the image pixel by pixel, for each labelled pixel we check if for that label we recorded any equivalent labels in our disjoint-set data structure. If we did, then we replace the pixel's label with the lowest label (the 'representative') in it's equivalence set. Eventually, every label is replaced with the representative label of it's set. Then we're done!
+
+For example:
 
 	Original image:
+
 		0 1 1 1 0 1
 		0 0 0 1 0 1
 		0 1 1 1 0 0
+
 
 	After first pass:
 		0 1 1 1 0 2
@@ -71,13 +80,15 @@ Again scanning through the image pixel by pixel, for each labelled pixel we chec
 
 		(labels 1 and 3 are recorded as equivalent)
 
+
 	After second pass:
+
 		0 1 1 1 0 2
 		0 0 0 1 0 2
 		0 1 1 1 0 0
 
 
-And we've labelled the connected components in our image!
+Done!
 
 
 
