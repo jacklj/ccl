@@ -1,5 +1,6 @@
 """
 	Disjoint-set data structure
+	Jack Lawrence-Jones, July 2016
 
 	A structure that maintains a collection of disjoint sets (no sets share items - each 
 	possible pair of sets' has intersection {}).
