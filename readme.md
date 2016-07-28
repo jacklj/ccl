@@ -15,13 +15,13 @@ Two pass Connected Component Labelling with Union-Find
 
 For simplicity, we will consider a monochrome image as a two dimensional boolean list, with background pixels having value 0 and foreground pixels having value 1. We will label the components with positive integers.
 
-	+---------+
-	|  * * *  |			 [[0,1,1,1,0],
-	|    *    | 		  [0,0,1,0,0],
-	|*   *    | 	-> 	  [1,0,1,0,0],
-	|* * *    |  		  [1,1,1,0,0],
-	|         |  		  [0,0,0,0,0]]
-	+---------+
+	 
+	   * * *   			 [[0,1,1,1],
+	     *      		  [0,0,1,0],
+	 *   *      	-> 	  [1,0,1,0],
+	 * * *       		  [1,1,1,0]]
+	             		  
+	
 
 
 First Pass
@@ -77,6 +77,7 @@ For example:
 
 
 	After first pass:
+
 		0 1 1 1 0 2
 		0 0 0 1 0 2
 		0 3 3 1 0 0
