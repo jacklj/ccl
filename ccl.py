@@ -66,9 +66,6 @@ def connected_component_labelling(image, connectivity_type):
 						for label in labels:
 							Union(getNode(smallest_label), getNode(label))
 
-	print("1st pass:")
-	print_image(image)
-	display_all_sets()
 
 	# 2nd Pass: replace labels with their root labels.
 	final_labels = {}
@@ -86,10 +83,6 @@ def connected_component_labelling(image, connectivity_type):
 				if new_label not in final_labels.keys():
 					final_labels[new_label] = new_label_number
 					new_label_number = new_label_number + 1
-
-	print("2nd pass:")
-	print_image(image)
-	display_all_sets()
 
 
 	# 3rd Pass: flatten label list so labels are consecutive integers starting from 1 (in order 
@@ -179,46 +172,6 @@ def print_image(image):
 
 
 
-# to do ########################################################################################
-# from Pillow import Image
-# from numpy import *
-def convert_image_to_2d_int_array(image_path):
-	"""
-		Converts monochrome images to 2D arrays.
-	"""
-	# temp=asarray(Image.open(image_path))
-	
-	# for j in temp:
-	# 	# new_temp gets the two first pixel values
-	#     new_temp = asarray([[i[0],i[1]] for i in j]) 
-	    
-
-def display_coloured_image(labelled_image):
-	"""
-		Displays image with connected components coloured in.
-	"""
-	pass
-
-
-def connected_components(labelled_image):
-	"""
-		Gets list of connected components, each with bounding box (x-min, y-min, x-max, y-max), 
-		mass (total number of pixels it contains) and an image of the component.
-	"""
-	pass
-
-
-# make this module useable as a script from the command line
-if __name__ == "__main__":
-    import sys
-    if len(sys.argv) > 1: # at least one command line parameter
-	    image_path = str(sys.argv[1])
-	    image_array = convert_image_to_2d_int_array(image_path)
-	    result = connected_component_labelling(image_array)
-	    print_image(result)
-
-
-
 # Testing ######################################################################################
 # to do: proper test cases
 i1 = [
@@ -248,10 +201,9 @@ print("----")
 result = connected_component_labelling(i2, CONNECTIVITY_4)
 print("Labelled:")
 print_image(result)
-print("----")
-print_image(i2)
 
 
+# test smallest(set) function
 # test_set = set()
 # test_set.add(3)
 # print(smallest(test_set))

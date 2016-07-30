@@ -189,21 +189,15 @@ def display_all_sets():
 # Testing ######################################################################################
 # to do: proper test cases.
 
-# [1 2 3] [4 5 6]
+# [1 2 3] [4]
 # one = MakeSet(1)
-# asd = MakeSet(1)
+# MakeSet(1) # try and make a node with same value
 # two = MakeSet(2)
 # three = MakeSet(3)
 # four = MakeSet(4)
-# five = MakeSet(5)
-# six = MakeSet(6)
 
 # Union(two, one)
-# Union(one, three)
-# Union(four, five)
-# Union(five, six)
-# Union(four, six)
-
+# Union(two, three)
 
 # display_all_nodes()
 # print("-----")
