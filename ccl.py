@@ -8,6 +8,11 @@
 
 	2 pass implementation using disjoint-set data structure to record label equivalences.
 	O(n) for image containing n pixels. 
+
+	Usage:
+	>>> image = Image.open("./binary_image.png")
+	>>> bool_image = image_to_2d_bool_array(image)
+	>>> result = connected_component_labelling(bool_image, 4)
 """
 
 import copy
@@ -172,42 +177,11 @@ def image_to_2d_bool_array(image):
 	return arr
 
 
-# Testing ######################################################################################
-i1 = [
-	[False,False,False,False],
-	[False,True,True,True],
-	[False,False,False,True],
-	[False,True,True,True],
-	]
+# Run ######################################################################################
+image = Image.open("./images/second_pass.png")
 
-i2 = [
-	[1,1,0,0,0,1,1,1,0,0],
-	[0,1,0,0,0,0,0,1,0,0],
-	[0,0,0,1,0,1,1,1,0,0],
-	[0,0,1,1,0,0,0,0,1,0],
-	[0,0,1,1,0,0,0,0,0,0],
-	[0,1,1,1,0,0,0,1,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,1,1,1,1,1],
-	[0,0,0,0,0,1,1,1,1,1],
-	[0,0,0,0,0,0,0,0,0,0],
-	]
-
-# print("Original image:")
-# print_image(i1)
-
-# result = connected_component_labelling(i1, CONNECTIVITY_4)
-# print("Labelled:")
-# print(result)
-
-
-image1 = Image.open("./images/second_pass.png")
-# image1 = Image.open("./images/connectivity_difference_test.png")
-
-input_image1 = image_to_2d_bool_array(image1)
-# print(image1)
-# print(input_image1)
-# output1 = connected_component_labelling(input_image1, CONNECTIVITY_4)
-# print(output1)
+bool_image = image_to_2d_bool_array(image)
+output = connected_component_labelling(bool_image, CONNECTIVITY_4)
+print(output)
 
 
