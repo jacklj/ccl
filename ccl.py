@@ -65,7 +65,7 @@ def connected_component_labelling(bool_input_image, connectivity_type):
 				else:
 					# Pixel is definitely part of a connected component: get smallest label of 
 					# neighbours
-					smallest_label = smallest(labels)
+					smallest_label = min(labels)
 					labelled_image[y,x] = smallest_label
 
 					if len(labels) > 1: # More than one type of label in component -> add 
@@ -154,22 +154,6 @@ def neighbouring_labels(image, connectivity_type, x, y):
 	return labels
 
 
-def smallest(set_x):
-	"""
-		Returns the smallest item in the set (returns False if set is empty).
-	"""
-	if set_x:
-		set_x = copy.deepcopy(set_x) # so we don't pop an item off the actual set of labels
-		smallest = set_x.pop()
-		for item in set_x:
-			if item < smallest:
-				smallest = item
-		return smallest
-
-	else:
-		return False
-
-
 def print_image(image):
 	""" 
 		Prints a 2D array nicely. For debugging.
@@ -214,3 +198,11 @@ print(result)
 # test_set = set()
 # test_set.add(3)
 # print(smallest(test_set))
+
+# import unittest
+
+# class TestCCL(unittest.TestCase):
+
+# 	def test_emptyset(self):
+# 		s = set()
+# 		self.assertFalse(smallest(s))
