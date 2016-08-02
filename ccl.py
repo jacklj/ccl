@@ -47,7 +47,7 @@ def connected_component_labelling(bool_input_image, connectivity_type):
 	for y, row in enumerate(bool_input_image): # Pythonic loop index variables
 		for x, pixel in enumerate(row):
 			
-			if pixel <= 0:
+			if pixel == False:
 				# Background pixel - leave output pixel value as 0
 				pass
 			else: 
@@ -202,10 +202,10 @@ i2 = [
 	]
 
 print("Original image:")
-print_image(i1)
+print_image(i2)
 print("----")
 
-result = connected_component_labelling(i1, CONNECTIVITY_4)
+result = connected_component_labelling(i2, CONNECTIVITY_4)
 print("Labelled:")
 print(result)
 
