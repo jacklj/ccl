@@ -12,12 +12,12 @@
 
 import copy
 import numpy as np
-# import Image
+from PIL import Image
 from union_find import MakeSet, Union, Find, getNode, display_all_sets
 
 
-CONNECTIVITY_4 = 1
-CONNECTIVITY_8 = 2
+CONNECTIVITY_4 = 4
+CONNECTIVITY_8 = 8
 
 
 def connected_component_labelling(bool_input_image, connectivity_type):
@@ -124,7 +124,7 @@ def neighbouring_labels(image, connectivity_type, x, y):
 
 	labels = set()
 
-	if connectivity_type == CONNECTIVITY_4 or connectivity_type == CONNECTIVITY_8:
+	if (connectivity_type == CONNECTIVITY_4) or (connectivity_type == CONNECTIVITY_8):
 		# West neighbour
 		if x > 0: # pixel is not on left edge of image
 			west_neighbour = image[y,x-1]
@@ -138,18 +138,20 @@ def neighbouring_labels(image, connectivity_type, x, y):
 				labels.add(north_neighbour)
 
 
-	if connectivity_type == CONNECTIVITY_8:
-		# North-west neighbour
-		if x > 0 and y > 0: # pixel is not on left or top edges of image
-			northwest_neighbour = image[y-1,x-1]
-			if northwest_neighbour > 0: # it's a labelled pixel
-				labels.add(northwest_neighbour)
+		if connectivity_type == CONNECTIVITY_8:
+			# North-west neighbour
+			if x > 0 and y > 0: # pixel is not on left or top edges of image
+				northwest_neighbour = image[y-1,x-1]
+				if northwest_neighbour > 0: # it's a labelled pixel
+					labels.add(northwest_neighbour)
 
-		# North-east neighbour
-		if y > 0 and x < len(image[y]) - 1: # pixel is not on top or right edges of image
-			northeast_neighbour = image[y-1,x+1]
-			if northeast_neighbour > 0: # it's a labelled pixel
-				labels.add(northeast_neighbour)
+			# North-east neighbour
+			if y > 0 and x < len(image[y]) - 1: # pixel is not on top or right edges of image
+				northeast_neighbour = image[y-1,x+1]
+				if northeast_neighbour > 0: # it's a labelled pixel
+					labels.add(northeast_neighbour)
+	else:
+		print("Connectivity type not found.")
 
 	return labels
 
@@ -162,9 +164,15 @@ def print_image(image):
 		print(row)
 
 
+def image_to_2d_bool_array(image):
+	im2 = image.convert('L')
+	arr = np.asarray(im2)
+	arr = arr != 255
+
+	return arr
+
 
 # Testing ######################################################################################
-# to do: proper test cases
 i1 = [
 	[False,False,False,False],
 	[False,True,True,True],
@@ -185,24 +193,21 @@ i2 = [
 	[0,0,0,0,0,0,0,0,0,0],
 	]
 
-print("Original image:")
-print_image(i2)
-print("----")
+# print("Original image:")
+# print_image(i1)
 
-result = connected_component_labelling(i2, CONNECTIVITY_4)
-print("Labelled:")
-print(result)
+# result = connected_component_labelling(i1, CONNECTIVITY_4)
+# print("Labelled:")
+# print(result)
 
 
-# test smallest(set) function
-# test_set = set()
-# test_set.add(3)
-# print(smallest(test_set))
+image1 = Image.open("./images/second_pass.png")
+# image1 = Image.open("./images/connectivity_difference_test.png")
 
-# import unittest
+input_image1 = image_to_2d_bool_array(image1)
+# print(image1)
+# print(input_image1)
+# output1 = connected_component_labelling(input_image1, CONNECTIVITY_4)
+# print(output1)
 
-# class TestCCL(unittest.TestCase):
 
-# 	def test_emptyset(self):
-# 		s = set()
-# 		self.assertFalse(smallest(s))

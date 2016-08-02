@@ -77,7 +77,7 @@ def MakeSet(value):
 	
 	# Modification to classic disjoint-set behaviour: if node already exists, return it
 	if getNode(value):
-		print("Node with value '" + str(value) + "' already exists.")
+		# print("Node with value '" + str(value) + "' already exists.")
 		return getNode(value)
 
 	# otherwise create node
