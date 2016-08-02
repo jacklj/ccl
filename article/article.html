@@ -1,0 +1,719 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="github-markdown.css">
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+		<script src="https://use.fontawesome.com/fb604cdc03.js"></script>
+
+
+		<style>
+
+			.markdown-body h1 {
+				border-color: rgb(210,210,210);
+
+			}
+
+
+			.markdown-body h5 {
+				/*text-transform: none;*/
+				/*text-decoration: */
+				font-weight:300;
+				margin-top: -6px;
+				margin-bottom:20px;
+
+				color: rgb(75,75,75)
+
+
+			}
+
+		    .markdown-body {
+		        box-sizing: border-box;
+		        /*min-width: 200px;*/
+		        max-width: 980px;
+		        margin: 0 auto;
+		        padding: 45px;
+		    }
+
+		    .diagram {
+		    	display: block;
+		    	position: relative;
+		    	margin-top: 10px;
+		    	margin-bottom: 30px;
+
+		    	width:100%;
+
+		    	overflow: hidden;
+
+		    	/*margin-left: auto;
+		    	margin-right: auto;
+*/
+		    	/*display: flex;
+				align-items: center;
+ 	 			justify-content: center;*/
+
+ 	 			/*border:1px solid blue;*/
+
+
+
+		    }
+
+		    .section {
+		    	margin: 0;
+		    	padding:0;
+
+		    	/*border:1px solid red;*/
+
+		    	text-align: center;
+
+
+
+		    }
+
+		    .section.one {
+		    	display:inline-block;
+		    	margin-left: auto;
+		    	margin-right: auto;
+		    }
+
+		    .section.two {
+		    	float:left;
+		    	width:50%;
+		    }
+
+		    .section.three {
+		    	float:left;
+		    	width:33%;
+		    }
+
+
+
+		    .arrow {
+		    	width:20%;
+		    	height:125px;
+
+		    	padding-top: 108px;
+
+		    	text-align: center;
+		    	font-size: 1.3em;
+			}
+
+
+			.section.three.arrow {
+				width:20%;
+			}
+
+	      @media (max-width: 768px) {
+	      		.section.two,
+		    	.section.three,
+		    	.section.three.arrow {
+			    	float:none;
+			    	width:100%;
+			    }
+
+			    .section.three.arrow {
+			    	padding-top: 40px;
+			    	height:80px;
+			    }
+		    }
+
+		    .arrow .fa-arrow-right {
+		    	display: block;
+		    }
+
+		    .arrow .fa-arrow-down {
+		    	display:none;
+
+		    }
+		    @media (max-width: 768px) {
+		    .arrow .fa-arrow-right {
+		    	display: none;
+		    }
+
+		    .arrow .fa-arrow-down {
+		    	display:block;
+
+		    }
+		    }
+
+
+		   /* .arrow i {
+		    	margin-top: 30px;
+		    }*/
+
+		    .section label {
+		    	display:block;
+
+		    	margin-top: 0;
+
+
+		    	text-align: center;
+		    	font-size: 14px;
+		    	line-height: 1.1em;
+
+		    	font-weight: 300;
+
+		    	font-family: Helvetica, sans-serif;
+
+
+		    }
+
+
+		    @media (max-width: 768px) {
+		    	.section label {
+			    	/*text-align:left;*/
+			    }
+		    }
+
+			.grid {
+				display: inline-block;
+				padding:0;
+				margin:20px;
+			
+				
+
+
+				font-family: Helvetica, sans-serif;
+
+				width:241px;
+
+				margin-left: auto;
+				margin-right: auto;
+				position:relative;
+			}
+
+			.grid.three {
+				width:121px;
+			}
+
+			.bordered {
+				border-right: 1px solid black;
+				border-bottom: 1px solid black;
+			}
+
+			.grid .grid_row {
+				padding:0;
+				margin:0;
+				display:block;
+				/*overflow: hidden;*/
+			}
+
+			.cell {
+				display:block;
+				float:left;
+				height:40px;
+				width:40px;
+				
+
+				text-align: center;
+				line-height: 40px;
+			}
+
+			.bordered .cell {
+				border-left:1px solid black;
+				border-top:1px solid black;				
+			}
+
+
+			.background {
+				background-color: white;
+			}
+
+			.foreground {
+				background-color: rgb(205,210,210);
+			}
+
+			.highlighted {
+				background-color: rgb(119,158,203);
+			}
+
+
+		</style>
+	</head>
+
+	<body>
+
+		<article class="markdown-body">
+
+			<h1>Connected Component Labelling</h1>
+			<h5>Jack Lawrence-Jones, 2nd August 2016</h5>
+
+			<p>Connected Component Labelling (CCL) is a technique used in Image Processing to identify blobs of pixels in an image. A blob, or connected component, is an area of connected foreground pixels: a single shape made up of a continuous mass of pixels, where from any pixel inside it you can travel to any other pixel inside it, without ever leaving the shape. </p>
+
+			<!-- <div class="container"> -->
+				<div class="diagram">
+
+						<div class="section">
+
+							<div class="grid bordered">
+
+								<div class="grid_row">
+									<div class="cell"></div>
+									<div class="cell"></div>
+									<div class="cell"></div>
+									<div class="cell"></div>
+									<div class="cell"></div>
+									<div class="cell"></div>
+								</div>
+
+								<div class="grid_row">
+									<div class="cell"></div>
+									<div class="cell"></div>
+									<div class="cell foreground"></div>
+									<div class="cell foreground"></div>
+									<div class="cell"></div>
+									<div class="cell"></div>
+								</div>
+
+								<div class="grid_row">
+									<div class="cell"></div>
+									<div class="cell"></div>
+									<div class="cell"></div>
+									<div class="cell foreground"></div>
+									<div class="cell"></div>
+									<div class="cell foreground"></div>
+								</div>
+								
+								<div class="grid_row">
+									<div class="cell"></div>
+									<div class="cell foreground"></div>
+									<div class="cell foreground"></div>
+									<div class="cell foreground"></div>
+									<div class="cell"></div>
+									<div class="cell foreground"></div>
+								</div>
+								
+								<div class="grid_row">
+									<div class="cell"></div>
+									<div class="cell"></div>
+									<div class="cell"></div>
+									<div class="cell"></div>
+									<div class="cell"></div>
+									<div class="cell foreground"></div>
+								</div>
+
+							</div>
+
+							<label> A monochrome image (5 pixels high and 6 pixels wide) containing 2 connected components</label>
+
+						</div>
+
+					</div>
+			<!-- </div> -->
+
+			<p>CCL is often used as part of the image segmentation step in a Computer Vision pipeline. Once the connected components in an image have been labelled, each one can be individually further analysed, eg classified (determining what kind of thing the object is). A common example is in Optical Character Recognition (recognition of handwritten or typed text in images): each connected component is likely to be an individual letter, so once they have been identified, they can each be passed to a character recognition stage (e.g. a neural net). </p>
+
+			<p>Some modern image processing pipelines have replaced techniques like CCL with end-to-end neural nets (deep neural nets), however algorithms like CCL are still key for applications such as live object detection and tracking and in embedded systems.</p>
+
+			<p>There are two main ways to implement the CCL algorithm: </p>
+
+			<ol>
+			<li>Scan through the image sequentially from top to bottom and left to right, labelling each pixel based on the labels of its surrounding pixels. A second pass is then needed to correct labelling inconsistencies that certain shaped components cause (equivalent labels are stored in a "union-find" data structure - more on this later). </li>
+			<li>Scan through the image, and as soon as a foreground pixel is encountered, label the whole of its parent component, using a stack to keep track of the component's pixels. </li>
+			</ol>
+
+			<p>In this article we'll look at the first method - designed by Rosenfeld and Pfaltz in 1966 using results from graph theory - as it has the best run-time efficiency.</p>
+
+			<h2>Two pass Connected Component Labelling with Union-Find</h2>
+
+			<p>Let's restrict our inputs to monochrome (black and white) images. Each pixel can either be a foreground (black) pixel, or a background (white) pixel. We will use the counting numbers (positive integers) to label components. Background pixels will be labelled '0'. So, we want our algorithm to do the following operation:</p>
+
+			<!-- <div class="container"> -->
+				<div class="diagram">
+
+					<div class="section three">
+
+						<div class="grid bordered">
+
+							<div class="grid_row">
+								<div class="cell"></div>
+								<div class="cell"></div>
+								<div class="cell"></div>
+								<div class="cell"></div>
+								<div class="cell"></div>
+								<div class="cell"></div>
+							</div>
+
+							<div class="grid_row">
+								<div class="cell"></div>
+								<div class="cell"></div>
+								<div class="cell foreground"></div>
+								<div class="cell foreground"></div>
+								<div class="cell"></div>
+								<div class="cell"></div>
+							</div>
+
+							<div class="grid_row">
+								<div class="cell"></div>
+								<div class="cell"></div>
+								<div class="cell"></div>
+								<div class="cell foreground"></div>
+								<div class="cell"></div>
+								<div class="cell foreground"></div>
+							</div>
+							
+							<div class="grid_row">
+								<div class="cell"></div>
+								<div class="cell foreground"></div>
+								<div class="cell foreground"></div>
+								<div class="cell foreground"></div>
+								<div class="cell"></div>
+								<div class="cell foreground"></div>
+							</div>
+							
+							<div class="grid_row">
+								<div class="cell"></div>
+								<div class="cell"></div>
+								<div class="cell"></div>
+								<div class="cell"></div>
+								<div class="cell"></div>
+								<div class="cell foreground"></div>
+							</div>
+
+						</div>
+
+						<label> Input image</label>
+					</div>
+
+					<div class="section three arrow">
+						<i class="fa fa-arrow-right" aria-hidden="true"></i>
+						<i class="fa fa-arrow-down" aria-hidden="true"></i>
+					</div>
+
+
+					<div class="section three">
+
+						<div class="grid bordered">
+							<div class="grid_row">
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+							</div>
+
+							<div class="grid_row">
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell foreground">1</div>
+								<div class="cell foreground">1</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+							</div>
+
+							<div class="grid_row">
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell foreground">1</div>
+								<div class="cell">0</div>
+								<div class="cell foreground">2</div>
+							</div>
+							
+							<div class="grid_row">
+								<div class="cell">0</div>
+								<div class="cell foreground">1</div>
+								<div class="cell foreground">1</div>
+								<div class="cell foreground">1</div>
+								<div class="cell">0</div>
+								<div class="cell foreground">2</div>
+							</div>
+							
+							<div class="grid_row">
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell foreground">2</div>
+							</div>
+							
+						</div>
+
+						<label> Output with components labelled (2D integer array)</label>
+					</div>
+
+				</div>
+			<!-- </div> -->
+
+			<h2>First Pass</h2>
+
+			<p>In the first pass we scan through the image, pixel by pixel, and look at each pixel's neighbours. A pixel's neighbours are the pixels that immediately surround it. If a pixel is neighbours with a labelled pixel, it is clearly part of the same component, so should be given the same label as its neighbour. Which specific neighbouring pixels we look at - the 'connectivity' - depends on the purpose of our image analysis: we can choose depending on the type of image, what it contains, what we want etc. Two commonly used connectivities are 4-connectivity and 8-connectivity.</p>
+
+			<p>4-connectivity includes the neighbours to the North, East, South and West of the current pixel. 8-connectivity additionally includes the North-East, South-East, South-West and North-West neighbours:</p>
+
+			<div class="diagram">
+				<div class="section two">
+
+					<div class="grid three bordered">
+
+						<div class="grid_row">
+							<div class="cell"></div>
+							<div class="cell highlighted"></div>
+							<div class="cell"></div>
+						</div>
+
+						<div class="grid_row">
+							<div class="cell highlighted"></div>
+							<div class="cell foreground"></div>
+							<div class="cell highlighted"></div>
+						</div>
+
+						<div class="grid_row">
+							<div class="cell"></div>
+							<div class="cell highlighted"></div>
+							<div class="cell"></div>
+						</div>
+
+					</div>
+
+					<label> 4-connectivity</label>
+
+				</div>
+
+				
+				<div class="section two">
+
+					<div class="grid three bordered">
+
+						<div class="grid_row">
+							<div class="cell highlighted"></div>
+							<div class="cell highlighted"></div>
+							<div class="cell highlighted"></div>
+						</div>
+
+						<div class="grid_row">
+							<div class="cell highlighted"></div>
+							<div class="cell foreground"></div>
+							<div class="cell highlighted"></div>
+						</div>
+
+						<div class="grid_row">
+							<div class="cell highlighted"></div>
+							<div class="cell highlighted"></div>
+							<div class="cell highlighted"></div>
+						</div>
+
+					</div>
+
+					<label> 8-connectivity</label>
+
+				</div>
+
+			</div>
+
+			<p>For this article we will use 4-connectivity.</p>
+
+			<p>As we scan through the image, row by row from top to bottom, and within each row left to right, we only need to examine those neighbours above and to the left of the current pixel. This is because of the direction in which we are scanning through the image - pixels to the right of and below the current pixel won't have been processed yet, so obviously won't be labelled. Therefore, our labelling kernel (the shape we are using to scan through the image and get each pixel's neighbours) looks like this:</p>
+
+			<div class="diagram">
+				<div class="section">
+
+					<div class="grid three bordered">
+
+						<div class="grid_row">
+							<div class="cell"></div>
+							<div class="cell highlighted"></div>
+							<div class="cell"></div>
+						</div>
+
+						<div class="grid_row">
+							<div class="cell highlighted"></div>
+							<div class="cell foreground"></div>
+							<div class="cell"></div>
+						</div>
+
+						<div class="grid_row">
+							<div class="cell"></div>
+							<div class="cell"></div>
+							<div class="cell"></div>
+						</div>
+
+					</div>
+
+					<label> Labelling kernel (4-connectivity)</label>
+
+				</div>
+
+			</div>
+
+
+			<p>Once the labels from the relevant neighbours have been retrieved, there are three potential scenarios:</p>
+
+			<ol>
+				<li>The pixel has no labelled neighbours (no neighbouring foreground pixels). Therefore, this pixel is the first pixel of a new shape, so should be given a new label. A label counter is used to keep track of the labels that have already been used, so that we make sure a unique new label is given. </li>
+				<li>The pixel has one or more neighbours with the same label. The current pixel is therefore part of the same shape, so is given the same label as its neighbour(s).</li>
+				<li>The pixel has multiple neighbours with different labels. This still means that the current pixel is part of the same shape as it's neighbours, however a labelling inconsistency has been found: our algorithm didn't 'know' that the two neighbours were part of the same component until now, as the current pixel joins them up. This inconsistency will need to be fixed in the second pass. For now, label the current pixel with the smallest of its neighbours' labels.</li>
+			</ol>
+
+
+			<h2>Handling inconsistencies...</h2>
+
+			<p>Certain specific shapes lead to the labelling inconsistencies encountered in scenario 3 above, resulting in the component containing areas of pixels with different labels - not good. This is due to the direction which we scan through the image - components with two sections that only join on the right side will 'look' like 2 separate components until that right joining section is encountered, so will be given different labels.</p>
+
+			<p>To fix these labelling errors, we need to record them when we encounter them during the first pass. Once these label equivalences (they are equivalent because they should actually be the same label) have been recorded, we can fix them with a second pass of the image. To store the label equivalences efficiently, we use the Disjoint-Set data structure (a.k.a. Union-Find). This keeps track of which labels are equivalent, and lets us efficiently retrieve the lowest label (the 'representative') in each set of equivalent labels. </p>
+
+			<p>Therefore, if we encounter the following situation during the first pass:</p>
+
+			<div class="diagram">
+				<div class="section">
+
+					<div class="grid three bordered">
+
+						<div class="grid_row">
+							<div class="cell">0</div>
+							<div class="cell foreground">1</div>
+							<div class="cell">0</div>
+						</div>
+
+						<div class="grid_row">
+							<div class="cell foreground">3</div>
+							<div class="cell foreground"></div>
+							<div class="cell"></div>
+						</div>
+
+						<div class="grid_row">
+							<div class="cell"></div>
+							<div class="cell"></div>
+							<div class="cell"></div>
+						</div>
+
+					</div>
+
+					<label> Half-way through the 1st pass, we encounter a pixel whose neighbours have different labels </label>
+
+				</div>
+
+			</div>
+
+			<p>In our disjoint-set data structure, we record that the labels 1 and 3 are equivalent.</p>
+
+			<h2>Second Pass</h2>
+
+			<p>Now we use the recorded label equivalences to fix any labelling inconsistencies from the first pass.</p>
+
+			<p>Again scanning through the image pixel by pixel, for each labelled pixel we check if we recorded any equivalent labels in our disjoint-set data structure. If we did, then we replace the pixel's label with the lowest label in its equivalence set. Eventually, every label is replaced with the lowest ('representative') label of its set. We're done ;)</p>
+
+				<div class="diagram">
+
+					<div class="section three">
+
+						<div class="grid bordered">
+							<div class="grid_row">
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+							</div>
+
+							<div class="grid_row">
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell foreground">1</div>
+								<div class="cell foreground">1</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+							</div>
+
+							<div class="grid_row">
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell foreground">1</div>
+								<div class="cell">0</div>
+								<div class="cell foreground">2</div>
+							</div>
+							
+							<div class="grid_row">
+								<div class="cell">0</div>
+								<div class="cell foreground">3</div>
+								<div class="cell foreground">3</div>
+								<div class="cell foreground">1</div>
+								<div class="cell">0</div>
+								<div class="cell foreground">2</div>
+							</div>
+							
+							<div class="grid_row">
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell foreground">2</div>
+							</div>
+							
+						</div>
+
+						<label> Result of first pass</label>
+					</div>
+
+
+					<div class="section three arrow">
+						<i class="fa fa-arrow-right" aria-hidden="true"></i>
+						<i class="fa fa-arrow-down" aria-hidden="true"></i>
+					</div>
+
+
+					<div class="section three">
+
+						<div class="grid bordered">
+							<div class="grid_row">
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+							</div>
+
+							<div class="grid_row">
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell foreground">1</div>
+								<div class="cell foreground">1</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+							</div>
+
+							<div class="grid_row">
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell foreground">1</div>
+								<div class="cell">0</div>
+								<div class="cell foreground">2</div>
+							</div>
+							
+							<div class="grid_row">
+								<div class="cell">0</div>
+								<div class="cell foreground">1</div>
+								<div class="cell foreground">1</div>
+								<div class="cell foreground">1</div>
+								<div class="cell">0</div>
+								<div class="cell foreground">2</div>
+							</div>
+							
+							<div class="grid_row">
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell">0</div>
+								<div class="cell foreground">2</div>
+							</div>
+							
+						</div>
+
+						<label> Result of second pass - finito</label>
+					</div>
+
+				</div>
+
+
+		</article>
+	</body>
+</html>

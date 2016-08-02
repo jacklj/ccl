@@ -15,7 +15,6 @@
 	>>> result = connected_component_labelling(bool_image, 4)
 """
 
-import copy
 import numpy as np
 from PIL import Image
 from union_find import MakeSet, Union, Find, getNode, display_all_sets
