@@ -186,7 +186,7 @@ def display_all_sets():
 
 
 # Testing ######################################################################################
-# to do: proper test cases.
+# To do: proper test cases
 if __name__ == "__main__":
 	# [1 2 3] [4]
 	one = MakeSet(1)
