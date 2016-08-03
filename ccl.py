@@ -2,17 +2,24 @@
 	Connected Component Labelling algorithm.
 	Jack Lawrence-Jones, July 2016
 
-	For blob/connected component detection. Labels each pixel within a given blob with the same 
-	label.
-	Monochrome images.
+	For blob/connected component detection in binary images. Labels each pixel in a given connected component 
+	with the same label.
 
-	2 pass implementation using disjoint-set data structure to record label equivalences.
+	2 pass implementation using disjoint-set data structure with Union-Find algorithms to record 
+	label equivalences.
+
 	O(n) for image containing n pixels. 
 
 	Usage:
-	>>> image = Image.open("./binary_image.png")
-	>>> bool_image = image_to_2d_bool_array(image)
-	>>> result = connected_component_labelling(bool_image, 4)
+		Python:
+			>>> image = Image.open("./binary_image.png")
+			>>> bool_image = image_to_2d_bool_array(image)
+			>>> result = connected_component_labelling(bool_image, 4)
+
+		Terminal (second parameter is connectivity type):
+			$  python ccl.py path/to/image.png 4
+
+
 """
 
 import numpy as np
@@ -26,8 +33,8 @@ CONNECTIVITY_8 = 8
 
 def connected_component_labelling(bool_input_image, connectivity_type):
 	"""
-		2 pass algorithm using disjoint-set data structure to maintain record of label 
-		equivalences.
+		2 pass algorithm using disjoint-set data structure with Union-Find algorithms to maintain 
+		record of label equivalences.
 
 		Input: binary image as 2D boolean array.
 		Output: 2D integer array of labelled pixels.
@@ -47,8 +54,8 @@ def connected_component_labelling(bool_input_image, connectivity_type):
 
 	current_label = 1 # Label counter
 
-	# 1st Pass: label image and record label equivalences.
-	for y, row in enumerate(bool_input_image): # Pythonic loop index variables
+	# 1st Pass: label image and record label equivalences
+	for y, row in enumerate(bool_input_image):
 		for x, pixel in enumerate(row):
 			
 			if pixel == False:
@@ -73,12 +80,12 @@ def connected_component_labelling(bool_input_image, connectivity_type):
 					labelled_image[y,x] = smallest_label
 
 					if len(labels) > 1: # More than one type of label in component -> add 
-										# equivalence class.
+										# equivalence class
 						for label in labels:
 							Union(getNode(smallest_label), getNode(label))
 
 
-	# 2nd Pass: replace labels with their root labels.
+	# 2nd Pass: replace labels with their root labels
 	final_labels = {}
 	new_label_number = 1
 
@@ -86,18 +93,18 @@ def connected_component_labelling(bool_input_image, connectivity_type):
 		for x, pixel_value in enumerate(row):
 			
 			if pixel_value > 0: # Foreground pixel
-				# Get element's set's representative value and use as the pixel's new label.
+				# Get element's set's representative value and use as the pixel's new label
 				new_label = Find(getNode(pixel_value)).value 
 				labelled_image[y,x] = new_label
 
-				# Add label to list of labels used, for 3rd pass (flattening label list).
+				# Add label to list of labels used, for 3rd pass (flattening label list)
 				if new_label not in final_labels.keys():
 					final_labels[new_label] = new_label_number
 					new_label_number = new_label_number + 1
 
 
 	# 3rd Pass: flatten label list so labels are consecutive integers starting from 1 (in order 
-	# of top to bottom, left to right).
+	# of top to bottom, left to right)
 	# Different implementation of disjoint-set may remove the need for 3rd pass?
 	for y, row in enumerate(labelled_image):
 		for x, pixel_value in enumerate(row):
@@ -130,29 +137,29 @@ def neighbouring_labels(image, connectivity_type, x, y):
 
 	if (connectivity_type == CONNECTIVITY_4) or (connectivity_type == CONNECTIVITY_8):
 		# West neighbour
-		if x > 0: # pixel is not on left edge of image
+		if x > 0: # Pixel is not on left edge of image
 			west_neighbour = image[y,x-1]
-			if west_neighbour > 0: # it's a labelled pixel
+			if west_neighbour > 0: # It's a labelled pixel
 				labels.add(west_neighbour)
 
 		# North neighbour
-		if y > 0: # pixel is not on top edge of image
+		if y > 0: # Pixel is not on top edge of image
 			north_neighbour = image[y-1,x]
-			if north_neighbour > 0: # it's a labelled pixel
+			if north_neighbour > 0: # It's a labelled pixel
 				labels.add(north_neighbour)
 
 
 		if connectivity_type == CONNECTIVITY_8:
-			# North-west neighbour
+			# North-West neighbour
 			if x > 0 and y > 0: # pixel is not on left or top edges of image
 				northwest_neighbour = image[y-1,x-1]
 				if northwest_neighbour > 0: # it's a labelled pixel
 					labels.add(northwest_neighbour)
 
-			# North-east neighbour
-			if y > 0 and x < len(image[y]) - 1: # pixel is not on top or right edges of image
+			# North-East neighbour
+			if y > 0 and x < len(image[y]) - 1: # Pixel is not on top or right edges of image
 				northeast_neighbour = image[y-1,x+1]
-				if northeast_neighbour > 0: # it's a labelled pixel
+				if northeast_neighbour > 0: # It's a labelled pixel
 					labels.add(northeast_neighbour)
 	else:
 		print("Connectivity type not found.")
@@ -164,7 +171,7 @@ def print_image(image):
 	""" 
 		Prints a 2D array nicely. For debugging.
 	"""
-	for y, row in enumerate(image): # python loop index variables
+	for y, row in enumerate(image):
 		print(row)
 
 
@@ -177,10 +184,27 @@ def image_to_2d_bool_array(image):
 
 
 # Run ######################################################################################
-image = Image.open("./images/second_pass.png")
+# Run from Terminal
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) > 1: # At least 1 command line parameter
+	    image_path = str(sys.argv[1])
 
-bool_image = image_to_2d_bool_array(image)
-output = connected_component_labelling(bool_image, CONNECTIVITY_4)
-print(output)
+	    if(len(sys.argv) > 2): # At least 2
+	    	connectivity_type = int(sys.argv[2])
+	    else:
+	    	connectivity_type = CONNECTIVITY_4
+
+	    image = Image.open(image_path)
+	    bool_image = image_to_2d_bool_array(image)
+	    result = connected_component_labelling(bool_image, connectivity_type)
+	    print_image(result)
+
+
+# Run in Python
+# image = Image.open("./images/second_pass.png")
+# bool_image = image_to_2d_bool_array(image)
+# output = connected_component_labelling(bool_image, CONNECTIVITY_4)
+# print(output)
 
 
