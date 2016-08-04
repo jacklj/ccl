@@ -18,8 +18,6 @@
 
 		Terminal (second parameter is connectivity type):
 			$  python ccl.py path/to/image.png 4
-
-
 """
 
 import numpy as np
