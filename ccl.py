@@ -24,14 +24,14 @@
 
 import numpy as np
 from PIL import Image
-from union_find import MakeSet, Union, Find, getNode, display_all_sets
+from union_find import UnionFind
 
 
 CONNECTIVITY_4 = 4
 CONNECTIVITY_8 = 8
 
 
-def connected_component_labelling(bool_input_image, connectivity_type):
+def connected_component_labelling(bool_input_image, connectivity_type=CONNECTIVITY_8):
 	"""
 		2 pass algorithm using disjoint-set data structure with Union-Find algorithms to maintain 
 		record of label equivalences.
@@ -45,14 +45,18 @@ def connected_component_labelling(bool_input_image, connectivity_type):
 		(optional 3rd pass: Flatten labels so they are consecutive integers starting from 1.)
 
 	"""
+	if connectivity_type !=4 and connectivity_type != 8:
+		raise ValueError("Invalid connectivity type (choose 4 or 8)")
+
+
 	image_width = len(bool_input_image[0])
 	image_height = len(bool_input_image)
 
 	# initialise efficient 2D int array with numpy
 	# N.B. numpy matrix addressing syntax: array[y,x]
 	labelled_image = np.zeros((image_height, image_width), dtype=np.int16)
-
-	current_label = 1 # Label counter
+	uf = UnionFind() # initialise union find data structure
+	current_label = 1 # initialise label counter
 
 	# 1st Pass: label image and record label equivalences
 	for y, row in enumerate(bool_input_image):
@@ -70,7 +74,7 @@ def connected_component_labelling(bool_input_image, connectivity_type):
 				if not labels:
 					# If no neighbouring foreground pixels, new label - use current_label 
 					labelled_image[y,x] = current_label
-					MakeSet(current_label) # record label in disjoint set
+					uf.MakeSet(current_label) # record label in disjoint set
 					current_label = current_label + 1 # increment for next time				
 				
 				else:
@@ -82,7 +86,7 @@ def connected_component_labelling(bool_input_image, connectivity_type):
 					if len(labels) > 1: # More than one type of label in component -> add 
 										# equivalence class
 						for label in labels:
-							Union(getNode(smallest_label), getNode(label))
+							uf.Union(uf.GetNode(smallest_label), uf.GetNode(label))
 
 
 	# 2nd Pass: replace labels with their root labels
@@ -94,7 +98,7 @@ def connected_component_labelling(bool_input_image, connectivity_type):
 			
 			if pixel_value > 0: # Foreground pixel
 				# Get element's set's representative value and use as the pixel's new label
-				new_label = Find(getNode(pixel_value)).value 
+				new_label = uf.Find(uf.GetNode(pixel_value)).value 
 				labelled_image[y,x] = new_label
 
 				# Add label to list of labels used, for 3rd pass (flattening label list)
@@ -181,10 +185,10 @@ def image_to_2d_bool_array(image):
 	arr = arr != 255
 
 	return arr
+	
+   
 
-
-# Run ######################################################################################
-# Run from Terminal
+# Run from Terminal ############################################################################
 if __name__ == "__main__":
     import sys
     if len(sys.argv) > 1: # At least 1 command line parameter
@@ -193,7 +197,7 @@ if __name__ == "__main__":
 	    if(len(sys.argv) > 2): # At least 2
 	    	connectivity_type = int(sys.argv[2])
 	    else:
-	    	connectivity_type = CONNECTIVITY_4
+	    	connectivity_type = CONNECTIVITY_8
 
 	    image = Image.open(image_path)
 	    bool_image = image_to_2d_bool_array(image)
