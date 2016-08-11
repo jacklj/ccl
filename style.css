@@ -1,0 +1,217 @@
+.markdown-body h1 {
+	border-color: rgb(210,210,210);
+}
+
+
+.markdown-body h5 {
+	margin-top: -6px;
+	margin-bottom: 20px;
+
+	font-weight: 300;
+	color: rgb(75,75,75)
+}
+
+
+.markdown-body {
+    box-sizing: border-box;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 45px;
+}
+
+
+.diagram {
+	display: block;
+	position: relative;
+	width: 100%;
+	margin-top: 10px;
+	margin-bottom: 30px;
+
+	overflow: hidden;
+}
+
+
+.section {
+	margin: 0;
+	padding: 0;
+
+	text-align: center;
+}
+
+
+.section.one {
+	display: inline-block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+
+.section.two {
+	float: left;
+	width: 50%;
+}
+
+
+.section.three {
+	float: left;
+	width: 33%;
+}
+
+
+.arrow {
+	width: 20%;
+	height: 125px;
+
+	padding-top: 108px;
+
+	text-align: center;
+	font-size: 1.3em;
+}
+
+
+.section.three.arrow {
+	width: 20%;
+}
+
+
+@media (max-width: 768px) {
+	.section.two,
+	.section.three,
+	.section.three.arrow {
+    	float: none;
+    	width: 100%;
+    }
+
+
+    .section.three.arrow {
+    	height: 80px;
+    	padding-top: 40px;
+    }
+}
+
+
+.arrow .fa-arrow-right {
+	display: block;
+}
+
+
+.arrow .fa-arrow-down {
+	display: none;
+}
+
+
+@media (max-width: 768px) {
+	.arrow .fa-arrow-right {
+		display: none;
+	}
+
+
+	.arrow .fa-arrow-down {
+		display: block;
+	}
+}
+
+
+.section label {
+	display: block;
+	margin-top: 0;
+
+	text-align: center;
+	font-size: 0.8em; /*14px;*/
+	line-height: 1.1em;
+	font-weight: 300;
+	font-family: Helvetica, sans-serif;
+}
+
+
+.grid {
+	display: inline-block;
+	position: relative;
+	width: 241px;
+	
+	margin: 20px;
+	margin-left: auto;
+	margin-right: auto;
+	
+	padding: 0;
+
+	font-family: Helvetica, sans-serif;	
+}
+
+
+.grid.three {
+	width: 121px;
+}
+
+
+.bordered {
+	border-right: 1px solid black;
+	border-bottom: 1px solid black;
+}
+
+
+.grid .grid_row {
+	display: block;
+
+	padding: 0;
+	margin: 0;
+}
+
+
+.cell {
+	display: block;
+	float: left;
+	height: 40px;
+	width: 40px;
+	
+	text-align: center;
+	line-height: 40px;
+}
+
+
+.bordered .cell {
+	border-left: 1px solid black;
+	border-top: 1px solid black;				
+}
+
+
+.background {
+	background-color: white;
+}
+
+
+.foreground {
+	background-color: rgb(205,210,210) !important;
+}
+
+
+.highlighted {
+	background-color: rgb(119,158,203) !important;
+}
+
+
+/* printing */
+@media print {
+	body {
+		-webkit-print-color-adjust: exact;
+		font-size: 0.5em;
+	}
+
+
+	.foreground {
+		background-color: rgb(205,210,210) !important;
+	}
+
+
+	.highlighted {
+		background-color: rgb(119,158,203) !important;
+	}
+}
+
+
+@page { 
+    /* this affects the margin in the printer settings */ 
+    margin: 25mm 25mm 25mm 25mm;  
+} 
+
+
