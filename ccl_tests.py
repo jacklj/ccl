@@ -97,6 +97,22 @@ class TestCCL(unittest.TestCase):
 		output = connected_component_labelling(input_image, CONNECTIVITY_8)
 		self.assertTrue(np.array_equal(output, desired_output))
 
+	def test_thirdpass_c4(self):
+		input_image = np.array([[False, True, False, False],
+								[True, True, False, True]])
+		desired_output = np.array( [[0,1,0,0],
+									[1,1,0,2]])
 
+		output = connected_component_labelling(input_image, CONNECTIVITY_4)
+		self.assertTrue(np.array_equal(output, desired_output))
+	
+	def test_thirdpass_c8(self):
+		input_image = np.array([[True, False, True, False, True],
+								[False, True, False, False, False]])
+		desired_output = np.array( [[1,0,1,0,2],
+									[0,1,0,0,0]])
+
+		output = connected_component_labelling(input_image, CONNECTIVITY_8)
+		self.assertTrue(np.array_equal(output, desired_output))
 
 unittest.main()

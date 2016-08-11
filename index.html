@@ -304,16 +304,9 @@
 
 			<p>CCL is often used as part of the image segmentation step in a Computer Vision pipeline. Once the connected components in an image have been labelled, each one can be individually further analysed, eg classified (determining what kind of thing the object is). A common example is in Optical Character Recognition (recognition of handwritten or typed text in images): each connected component is likely to be an individual letter, so once they have been identified, they can each be passed to a character recognition stage (e.g. a neural net). </p>
 
-			<p>Some modern image processing pipelines have replaced techniques like CCL with end-to-end neural nets (deep neural nets), however algorithms like CCL are still key for applications such as live object detection and tracking and in embedded systems.</p>
+			<p>Some modern image processing pipelines have replaced techniques like CCL with end-to-end neural nets (deep neural nets). However, such techniques are still key for applications such as live object detection and tracking and in embedded systems.</p>
 
-			<p>There are two main ways to implement the CCL algorithm: </p>
-
-			<ol>
-			<li>Scan through the image sequentially from top to bottom and left to right, labelling each pixel based on the labels of its surrounding pixels. A second pass is then needed to correct labelling inconsistencies that certain shaped components cause (equivalent labels are stored in a "union-find" data structure - more on this later). </li>
-			<li>Scan through the image, and as soon as a foreground pixel is encountered, label the whole of its parent component, using a stack to keep track of the component's pixels. </li>
-			</ol>
-
-			<p>In this article we'll look at the first method - designed by Rosenfeld and Pfaltz in 1966 using results from graph theory - as it has the best run-time efficiency.</p>
+			<p>Many different CCL algorithms exist, including those optimising for space complexity, time complexity, and for parallel processing. In this article we'll look at the classical algorithm, designed by Rosenfeld and Pfaltz in 1966 using results from graph theory. We scan through the image sequentially from top to bottom and left to right, labelling each pixel based on the labels of its surrounding pixels. A second pass is then needed to correct labelling inconsistencies that certain shaped components cause (equivalent labels are stored in a "Union-Find" data structure - more on this later). Let's go through the algorithm in more detail - enjoy!</p>
 
 			<h2>Two pass Connected Component Labelling with Union-Find</h2>
 
@@ -712,6 +705,33 @@
 					</div>
 
 				</div>
+
+				<h2>Optional Third Pass</h2>
+
+			<p>You'll see in the Python code that there is an optional third pass. In some cases, due to certain component shapes and arrangements, the labels given to them won't be consecutive integers. The third pass flattens the labels so that they are consecutive.</p>
+
+			<h2>Complexity</h2>
+
+			<p>This section discusses the time and space complexities of our algorithm. If you don't know what big O notation is, check <a href="https://www.interviewcake.com/article/java/big-o-notation-time-and-space-complexity">this</a> out before continuing. </p>
+
+			<h4>Initialisation</h4>
+			<p>Let's say the image has N pixels (if it is X pixels wide and Y pixels high, then N = X*Y). We start by computing the height and width of the image to use in our for loops; these are both O(1) using Python's len() function (see <a href="https://wiki.python.org/moin/TimeComplexity">here</a>). We also intialise the labelled output image (I chose not to implement in-place labelling), which is O(N), and intialise the Union-Find object and the label counter - both O(1).</p>
+
+			<h4>First Pass</h4>
+			<p>In the first pass, for each pixel we look at its previously looked-at neighbours (2 neighbours for 4-connectivity, 4 neighbours for 8-connectivity). If any Union-Find operations need to be performed, due to our efficient implementation of the Union-Find data structure, they have effective average cost of O(1). Therefore our initial set-up code and first pass have total time cost O(N).</p>
+
+			<h4>Second Pass</h4>
+			<p>The second pass looks at each of the N pixels and replaces each label with the representative label of its equivalence class, correcting any labelling inconsistencies. The Find() operation used to get the representative labels is effectively O(1). We also record each label used in a Python dictionary, so we can then flatten the labels in the third pass. As this is implemented as a hash table in Python, checking key membership has amortized cost O(1). Therefore the second pass is also O(N).</p>
+
+			<h4>Third Pass</h4>
+			<p>The third pass looks at each pixel and replaces the label with its flattened label list equivalent. Therefore, the third pass has time complexity O(N).</p>
+
+			<h4>Total</h4>
+			<p>Adding this all together, and removing constant multipliers, our algorithm has time complexity O(N). It requires additional space O(N + L): O(N) for the output labelled image and O(L) for both the Union-Find object and the label hash table constructed for the third pass (where L is the number of labels created). As the maximum possible number of labels required to label an image is N/2 (a chess board pattern, using 4-connectivity), O(N+L) becomes O(N). So we have <b>O(N) time</b> and <b>O(N) space</b>!</p>
+
+
+
+			<p><a href="https://github.com/jacklj/ccl">Get the code.</a></p>
 
 
 		</article>

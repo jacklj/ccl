@@ -64,13 +64,13 @@ def connected_component_labelling(bool_input_image, connectivity_type=CONNECTIVI
 				# Background pixel - leave output pixel value as 0
 				pass
 			else: 
-				# Foreground pixel - work out what its label should be.
+				# Foreground pixel - work out what its label should be
 
 				# Get set of neighbour's labels
 				labels = neighbouring_labels(labelled_image, connectivity_type, x, y)
 
 				if not labels:
-					# If no neighbouring foreground pixels, new label - use current_label 
+					# If no neighbouring foreground pixels, new label -> use current_label 
 					labelled_image[y,x] = current_label
 					uf.MakeSet(current_label) # record label in disjoint set
 					current_label = current_label + 1 # increment for next time				
@@ -100,7 +100,7 @@ def connected_component_labelling(bool_input_image, connectivity_type=CONNECTIVI
 				labelled_image[y,x] = new_label
 
 				# Add label to list of labels used, for 3rd pass (flattening label list)
-				if new_label not in final_labels.keys():
+				if new_label not in final_labels:
 					final_labels[new_label] = new_label_number
 					new_label_number = new_label_number + 1
 
