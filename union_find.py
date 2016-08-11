@@ -180,6 +180,5 @@ class UnionFind:
 # uf.Union(two, one)
 # uf.Union(two, three)
 
-# print("Union Find 1")
 # uf.display_all_sets()
 # uf.display_all_nodes()
